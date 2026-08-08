@@ -24,7 +24,7 @@ spec:
             - containerPort: 5173
 
 
-# ------------------ LOADBALANCER
+# ------------------ FRONTEND CLUSTER SERVICE(ONLY AVAILABLE FOR INTERNAL COMMUNICATION)
 ---
 apiVersion: v1
 kind: Service

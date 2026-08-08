@@ -19,7 +19,7 @@ spec:
           image: mongo
           ports:
             - containerPort: 27017
-# ------------------ MONGO CLUSTER
+# ------------------ MONGO CLUSTER SERVICE(ONLY AVAILABLE FOR INTERNAL COMMUNICATION)
 ---
 apiVersion: v1
 kind: Service
@@ -32,6 +32,9 @@ spec:
     - protocol: TCP
       port: 27017
       targetPort: 27017
+
+
+# ------------------ CUSTOM INGRESS SERVICE(EXPOSES FRONTEND AND BACKEND TO OUTSIDE WORLD)
 ---
 apiVersion: v1
 kind: Service
