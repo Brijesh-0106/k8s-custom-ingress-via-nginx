@@ -1,19 +1,153 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongo-deployment
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: k8s-tut
-  template:
-    metadata:
-      labels:
-        app: k8s-tut
-    spec:
-      containers:
-        - name: mongo
-          image: mongo
-          ports:
-            - containerPort: 80
+# # ================================================= DEPLOYMENTS =======================================================
+
+# # ------------------ MONGO
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: mongo-deployment
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: app-mongo
+#   template:
+#     metadata:
+#       labels:
+#         app: app-mongo
+#     spec:
+#       containers:
+#         - name: mongo
+#           image: mongo
+#           ports:
+#             - containerPort: 27017
+
+# # ------------------- BACKEND
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: backend-deployment
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: app-backend
+#   template:
+#     metadata:
+#       labels:
+#         app: app-backend
+#     spec:
+#       containers:
+#         - name: backend
+#           image: brijesh408/k8s-service-tut:v1
+#           env:
+#             - name: MONGO_URI
+#               value: "mongodb://mongo-service:27017/k8sServiceTut"
+#           ports:
+#             - containerPort: 3001
+
+# # ------------------ FRONTEND
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: frontend-deployment
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: app-frontend
+#   template:
+#     metadata:
+#       labels:
+#         app: app-frontend
+#     spec:
+#       containers:
+#         - name: frontend
+#           image: brijesh408/k8s-service-tut-frontend:v4
+#           env:
+#             - name: VITE_BACKEND_URI
+#               value: http://backend-service:3001
+#           ports:
+#             - containerPort: 5173
+
+# # ------------------ NGINX
+
+# ---
+# # apiVersion: apps/v1
+# # kind: Deployment
+# # metadata:
+# #   name: backend-deployment
+# # spec:
+# #   replicas: 1
+# #   selector:
+# #     matchLabels:
+# #       app: app-backend
+# #   template:
+# #     metadata:
+# #       labels:
+# #         app: app-backend
+# #     spec:
+# #       containers:
+# #         - name: backend
+# #           image: brijesh408/k8s-service-tut:v1
+# #           ports:
+# #             - containerPort: 3001
+
+# # ================================================= SERVICES =======================================================
+
+# # ------------------ MONGO CLUSTER
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: mongo-service
+# spec:
+#   selector:
+#     app: app-mongo
+#   ports:
+#     - protocol: TCP
+#       port: 27017
+#       targetPort: 27017
+
+# # ------------------ BACKEND CLUSTER
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: backend-service
+# spec:
+#   selector:
+#     app: app-backend
+#   ports:
+#     - protocol: TCP
+#       port: 3001
+#       targetPort: 3001
+
+# # ------------------ LOADBALANCER
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: load-balancer
+# spec:
+#   selector:
+#     app: app-frontend
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 5173
+#   type: LoadBalancer
+# # ------------------ FRONTEND CLUSTER
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: frontend-service
+# spec:
+#   selector:
+#     app: app-frontend
+#   ports:
+#     - protocol: TCP
+#       port: 5173
+#       targetPort: 5173

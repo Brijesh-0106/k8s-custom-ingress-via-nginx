@@ -1,14 +1,13 @@
+const dotenv = require('dotenv')
+dotenv.config()
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors')
 const Schema = mongoose.Schema;
 const app = express();
 let ind = 1;
-const { loadEnvFile } = require('node:process');
 app.use(cors())
 app.use(express.json())
-// const dotenv = require('dotenv')
-// dotenv.config()
 
 const userSchema = new Schema({
     name: String,
@@ -17,12 +16,6 @@ const userSchema = new Schema({
 const User = mongoose.model('User', userSchema);
 
 async function connectToMongoDB() {
-
-    try {
-        process.loadEnvFile();
-    } catch (err) {
-        // No .env file present (expected in containers) — fall through to process.env
-    }
     try {
         console.log(process.env.MONGO_URI)
         await mongoose.connect(process.env.MONGO_URI)

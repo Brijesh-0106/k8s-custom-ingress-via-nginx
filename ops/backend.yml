@@ -1,0 +1,39 @@
+# ------------------- BACKEND
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-backend
+  template:
+    metadata:
+      labels:
+        app: app-backend
+    spec:
+      containers:
+        - name: backend
+          image: brijesh408/k8s-service-tut:v1
+          env:
+            - name: MONGO_URI
+              value: "mongodb://mongo-service:27017/k8sServiceTut-check"
+          ports:
+            - containerPort: 3001
+
+
+# ------------------ BACKEND CLUSTER
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: app-backend
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001

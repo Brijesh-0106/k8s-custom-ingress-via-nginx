@@ -1,0 +1,39 @@
+# ------------------ FRONTEND
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-frontend
+  template:
+    metadata:
+      labels:
+        app: app-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: brijesh408/k8s-service-tut-frontend:v5
+          env:
+            - name: VITE_BACKEND_URI
+              value: /api
+          ports:
+            - containerPort: 5173
+
+
+# ------------------ LOADBALANCER
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: app-frontend
+  ports:
+    - protocol: TCP
+      port: 5173
+      targetPort: 5173
